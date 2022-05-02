@@ -1,1 +1,1 @@
-Neural Networks Architecture based on domain taxonomies
+Neural Networks Architecture based on Concept Lattices
