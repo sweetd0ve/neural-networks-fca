@@ -1,1 +1,1 @@
-Neural Networks Architecture based on Concept Lattices
+Neural Networks Architecture based on Formal Concept Lattices
