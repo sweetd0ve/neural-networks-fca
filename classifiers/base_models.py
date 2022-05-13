@@ -25,6 +25,9 @@ from tensorflow.keras import layers
 
 
 import os
+import logging
+
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 
 
 import warnings
@@ -58,8 +61,9 @@ class BaseClassifiers:
 
         # fitting the model for grid search
         grid_search = grid.fit(self.x_train, self.y_train)
-        preds_knn = grid_search.predict(self.x_test)
+        logging.info(f'{self.dataset_name}\nkNN best params: {grid.best_params_}')
 
+        preds_knn = grid_search.predict(self.x_test)
         res_knn = self._evaluate_model(preds_knn)
         return res_knn
 
@@ -80,7 +84,7 @@ class BaseClassifiers:
         """
         :return: accuracy, f1_score by Decision Tree Classifier on x_test dataset
         """
-        decision_tree = DecisionTreeClassifier()
+        decision_tree = DecisionTreeClassifier(random_state=12)
         decision_tree.fit(self.x_train, self.y_train)
         preds_dt = decision_tree.predict(self.x_test).astype(int)
         # accuracy on training data
@@ -93,7 +97,7 @@ class BaseClassifiers:
         """
         :return: accuracy, f1_score, classification_report by RandomForest classifier on x_test dataset
         """
-        rf = RandomForestClassifier(n_estimators=20, random_state=12, max_depth=10)
+        rf = RandomForestClassifier(n_estimators=30, random_state=12, max_depth=10)
         rf.fit(self.x_train, self.y_train)
         preds_rf = rf.predict(self.x_test)
 
@@ -112,10 +116,12 @@ class BaseClassifiers:
             "colsample_bytree": [0.3, 0.4, 0.5, 0.7]
         }
         classifier = xgb.XGBClassifier()
-        random_search = RandomizedSearchCV(classifier, param_distributions=params, n_iter=5,
+        random_search = RandomizedSearchCV(classifier, param_distributions=params, n_iter=10,
                                            scoring='accuracy', n_jobs=-1, cv=10, verbose=3)
         random_search.fit(self.x_train, self.y_train)
         best_params = random_search.best_params_
+        logging.info(f'{self.dataset_name}\nXGBClassifier best params: {best_params}')
+
 
         classifier = xgb.XGBClassifier(
             base_score=0.5, booster='gbtree', colsample_bylevel=1,
@@ -174,13 +180,13 @@ class BaseClassifiers:
             directory=models_path,
             project_name='kerastuner_params')
 
-        tuner.search(train_x, train_y, epochs=30, batch_size=256, validation_data=(valid_x, valid_y))
+        tuner.search(train_x, train_y, epochs=100, batch_size=128, validation_data=(valid_x, valid_y))
         model = tuner.get_best_models(num_models=1)[0]
-        model.fit(train_x, train_y, epochs=200, initial_epoch=31, validation_data=(valid_x, valid_y))
+        model.fit(train_x, train_y, epochs=200, initial_epoch=20, validation_data=(valid_x, valid_y))
 
         gc.collect()
 
-        print(model.summary())
+        logging.info(f'{self.dataset_name}\n MLP model summary:\n {model.summary()}')
         model.evaluate(self.x_test, self.y_test)
         preds_mlp = model.predict(self.x_test)
         preds_mlp[preds_mlp <= 0.5] = 0
@@ -198,7 +204,8 @@ class BaseClassifiers:
         acc = accuracy_score(self.y_test, preds)
         f1 = f1_score(self.y_test, preds)
         report = classification_report(self.y_test, preds)
-        print('Classification report on testing sample: \n', report)
+        logging.info(f'{self.dataset_name} classification report:\n {report}')
+
         # for binary classification
         roc_auc = roc_auc_score(self.y_test, preds)
 

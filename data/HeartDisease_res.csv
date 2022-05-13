@@ -1,39 +1,7 @@
-,accuracy,f1_score,fpr,tpr,Model
-0,1.0,1.0,"              precision    recall  f1-score   support
-
-           0       1.00      1.00      1.00       367
-           1       1.00      1.00      1.00       401
-
-    accuracy                           1.00       768
-   macro avg       1.00      1.00      1.00       768
-weighted avg       1.00      1.00      1.00       768
-",,K-Nearest Neighbours
-1,0.8515625,0.8619854721549637,"              precision    recall  f1-score   support
-
-           0       0.87      0.81      0.84       367
-           1       0.84      0.89      0.86       401
-
-    accuracy                           0.85       768
-   macro avg       0.85      0.85      0.85       768
-weighted avg       0.85      0.85      0.85       768
-",,Gaussian Naive Bayes
-2,1.0,1.0,"              precision    recall  f1-score   support
-
-           0       1.00      1.00      1.00       367
-           1       1.00      1.00      1.00       401
-
-    accuracy                           1.00       768
-   macro avg       1.00      1.00      1.00       768
-weighted avg       1.00      1.00      1.00       768
-",,Decision Tree Classifier
-3,1.0,1.0,"              precision    recall  f1-score   support
-
-           0       1.00      1.00      1.00       367
-           1       1.00      1.00      1.00       401
-
-    accuracy                           1.00       768
-   macro avg       1.00      1.00      1.00       768
-weighted avg       1.00      1.00      1.00       768
-",,Random Forest
-4,1.0,1.0,[0. 0. 1.],[0. 1. 1.],XGBoost Classifier
-5,0.8697916666666666,0.8677248677248678,[0.         0.07356948 1.        ],[0.         0.81795511 1.        ],Multilayer Perceptron (NN)
+,accuracy,f1_score,fpr,tpr,roc_auc,Model
+0,1.0,1.0,[0. 0. 1.],[0. 1. 1.],1.0,K-Nearest Neighbours
+1,0.8515625,0.8619854721549637,[0.        0.1880109 1.       ],[0.         0.88778055 1.        ],0.8498848247229338,Gaussian Naive Bayes
+2,1.0,1.0,[0. 0. 1.],[0. 1. 1.],1.0,Decision Tree Classifier
+3,1.0,1.0,[0. 0. 1.],[0. 1. 1.],1.0,Random Forest
+4,1.0,1.0,[0. 0. 1.],[0. 1. 1.],1.0,XGBoost Classifier
+5,0.8684895833333334,0.8861330326944759,[0.         0.25340599 1.        ],[0.         0.98004988 1.        ],0.8633219403806559,Multilayer Perceptron (NN)
